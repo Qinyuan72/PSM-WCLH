@@ -11,6 +11,7 @@
 const char* ssid = STASSID;
 const char* password = STAPSK;
 WiFiServer wifiServer(8080);
+int LED_BUILTIN = 2;
 
 void setup() {
   pinMode(LED_BUILTIN,OUTPUT);
@@ -56,10 +57,7 @@ void setup() {
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
   });
-  });
   ArduinoOTA.begin();
-
-
 
 //***************************************##***************************************//
 
@@ -110,29 +108,28 @@ if (true) //Old void setup()
 void loop() {
   ArduinoOTA.handle();
 //***************************************##***************************************//
-    WiFiClient client = wifiServer.available();
-    if (client) 
+  WiFiClient client = wifiServer.available();
+  if (client) 
+  {
+    while (client.connected())
     {
-        while (client.connected())
-        {
-            digitalWrite(LED_BUILTIN, HIGH); // Show that the client is conncted.
-            while (i < 5)                    //Flash five times when conncted.
-            {
-                digitalWrite(LED_BUILTIN, HIGH);
-                delay(50);
-                i = i + 1;
-                digitalWrite(LED_BUILTIN, LOW);
-                delay(50);
-            }
-            while (Serial.available > 0)
-            {
-                char data = client.read();
-                client.print(data,HEX);
-            }
-
-        }
-        
+      digitalWrite(LED_BUILTIN, HIGH); // Show that the client is conncted.
+      int i = 0;
+      while (i < 5)                    //Flash five times when conncted.
+      {
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(50);
+        i = i + 1;
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(50);
+      }
+      if (Serial.available() > 0)
+      {
+        int data = client.read();
+        client.print(data);
+      }
     }
     client.stop();
     digitalWrite(LED_BUILTIN, LOW);
+  }
 }
