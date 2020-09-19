@@ -43,6 +43,7 @@ void setup() {
   // ArduinoOTA.setPasswordHash("21232f297a57a5a743894a0e4a801fc3");
   
   //ArduinoOTA.setPassword((const char *)"004424");
+  
   ArduinoOTA.onStart([]() {
     String type;
     if (ArduinoOTA.getCommand() == U_FLASH) {
@@ -111,10 +112,10 @@ void loop() {
   WiFiClient client = wifiServer.available();
   if (client) 
   {
-    while (client.connected())
+    int i = 0;
+    if (client.connected())
     {
-      digitalWrite(LED_BUILTIN, HIGH); // Show that the client is conncted.
-      int i = 0;
+      Serial.flush();
       while (i < 5)                    //Flash five times when conncted.
       {
         digitalWrite(LED_BUILTIN, HIGH);
@@ -123,13 +124,24 @@ void loop() {
         digitalWrite(LED_BUILTIN, LOW);
         delay(50);
       }
+    }
+    while (client.connected())
+    {
       if (Serial.available() > 0)
       {
-        int data = client.read();
+        int data = Serial.read();
         client.print(data);
       }
     }
     client.stop();
     digitalWrite(LED_BUILTIN, LOW);
+    while (i < 3)                    //Flash five times when conncted.
+    {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(200);
+      i = i + 1;
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(100);
+    }
   }
 }

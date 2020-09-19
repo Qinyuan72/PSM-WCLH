@@ -47,7 +47,7 @@ def LCD_str_inputmaker(input_str = ""):
 def main():
     socket_start()
     while True:
-        data = sock.recv(64)
+        data = sock.recv(1024)
         print(data)
 
 
