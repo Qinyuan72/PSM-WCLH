@@ -56,7 +56,7 @@ class PSMconnection:
         else:
             return 'SUM Authentication failed'
 
-    def RefreshData(self,):
+    def RefreshData(self,):                                  #Refresh the data stored in object.
         LisDataDict = self.getrawData()
         self.m1point0      =  int(LisDataDict[4]  + LisDataDict[5] ,16)
         self.pm2point5     =  int(LisDataDict[6]  + LisDataDict[7] ,16)
@@ -73,8 +73,12 @@ class PSMconnection:
         
         
 
-PSM = PSMconnection(PSMNetworkConfig=('192.168.31.230',8080))
-PSM.PSMsocket_start()
+PSM = PSMconnection(PSMNetworkConfig=('192.168.31.230',8080))#This two line is necessary to initialize the PSM object.
+PSM.PSMsocket_start()                                        #//
+
+a = 0
 while True:
     PSM.RefreshData()
-    print(PSM.pm2point5_air)
+    if a != PSM.pm2point5_air:
+        print('\rpm2.5: {}{}'.format(PSM.pm2point5_air,'↓' if a - PSM.pm2point5_air > 0 else '↑'),end="")
+    a = PSM.pm2point5_air
