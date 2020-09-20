@@ -35,7 +35,14 @@ class PSMconnection:
             LisData = ['42']
             incomingDataHex = hexShowNew(self.sock.recv(1024))
             LisData += incomingDataHex.split()
-        return LisData
+        SUM = 0
+        Aut = int(LisData[30] + LisData[31],16)
+        for i in range(0,29):
+            SUM += int(LisData[i],16)
+        if SUM == Aut:
+            return LisData
+        else:
+            return 'SUM Authentication failed'
 
 PSM = PSMconnection(PSMNetworkConfig=('192.168.31.230',8080),sock=0)
 PSM.PSMsocket_start()
