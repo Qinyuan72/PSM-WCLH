@@ -115,7 +115,6 @@ void loop() {
     int i = 0;
     if (client.connected())
     {
-      Serial.flush();
       while (i < 5)                    //Flash five times when conncted.
       {
         digitalWrite(LED_BUILTIN, HIGH);
@@ -127,21 +126,14 @@ void loop() {
     }
     while (client.connected())
     {
+
       if (Serial.available() > 0)
       {
-        int data = Serial.read();
+        char data = Serial.read();
         client.print(data);
       }
     }
     client.stop();
     digitalWrite(LED_BUILTIN, LOW);
-    while (i < 3)                    //Flash five times when conncted.
-    {
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(200);
-      i = i + 1;
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(100);
-    }
   }
 }
