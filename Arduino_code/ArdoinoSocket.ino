@@ -11,7 +11,7 @@
 const char* ssid = STASSID;
 const char* password = STAPSK;
 WiFiServer wifiServer(8080);
-int LED_BUILTIN = 2;
+int LED_BUILTIN = 2; //comment this line when uploading to board. 
 
 void setup() {
   pinMode(LED_BUILTIN,OUTPUT);
